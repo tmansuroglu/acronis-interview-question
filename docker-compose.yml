@@ -6,8 +6,10 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
-      - ./public/uploads:/app/public/uploads
+      - uploads:/app/uploads # tell container to start volume 'uploads' at '/app/uploads'
     environment:
       - NODE_ENV=production
+volumes: #  named volume definition at top level
+  uploads:
