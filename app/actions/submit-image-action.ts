@@ -35,7 +35,7 @@ export async function submitImageAction(
       return imageValidationError;
     }
 
-    const fileExtension = getFileExtension(file as File);
+    const fileExtension = getFileExtension(file);
 
     if (!ALLOWED_EXTENSIONS.includes(fileExtension)) {
       return { error: 'Invalid file type.', success: false };
