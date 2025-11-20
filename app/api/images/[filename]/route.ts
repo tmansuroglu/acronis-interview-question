@@ -1,11 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import {
-  getContentType,
-  getImagePath,
-  doesImageExist,
-} from '@/lib/image-utils';
+import { getContentType, getImagePath, doesImageExist } from '@/lib/api-utils';
 import { IMAGE_CACHE_HEADERS } from '@/lib/constants';
 import { Status } from '@/lib/enums';
 

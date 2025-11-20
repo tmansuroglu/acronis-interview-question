@@ -4,6 +4,8 @@ import { useActionState } from 'react';
 import { submitImageAction } from './actions/submit-image-action';
 import Image from 'next/image';
 import { IMAGE_INPUT_NAME } from '@/lib/constants';
+import { useImagePreview } from '@/lib/hooks';
+import { handleImageFormSubmit } from '@/lib/form-utils';
 
 export default function Home() {
   const [state, formAction, isPending] = useActionState(submitImageAction, {
@@ -11,12 +13,18 @@ export default function Home() {
     imagePath: '',
   });
 
+  const { imagePreview, handleImagePreviewChange } = useImagePreview();
+
   return (
     <div className='max-w-md mx-auto p-4'>
       {/* Image uploader */}
       <div className='p-4 border rounded'>
         <h2 className='text-xl font-semibold mb-3'>Upload Image</h2>
-        <form action={formAction} className='space-y-4'>
+        <form
+          action={formAction}
+          className='space-y-4'
+          onSubmit={handleImageFormSubmit}
+        >
           <div>
             <label htmlFor='image' className='block mb-1'>
               Select Image
@@ -28,12 +36,24 @@ export default function Home() {
               className='w-full p-2 border rounded'
               required
               name={IMAGE_INPUT_NAME}
+              onChange={handleImagePreviewChange}
             />
           </div>
-
+          {imagePreview && (
+            <div className='mt-2'>
+              <p className='mb-1'>Preview:</p>
+              <Image
+                src={imagePreview}
+                alt='Preview'
+                className='max-h-40 rounded'
+                width={100}
+                height={100}
+              />
+            </div>
+          )}
           <button
             type='submit'
-            disabled={isPending}
+            disabled={isPending || !imagePreview}
             className='bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 disabled:opacity-50'
           >
             {isPending ? 'Uploading...' : 'Upload Image'}

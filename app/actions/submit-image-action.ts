@@ -1,18 +1,14 @@
 'use server';
 
-import {
-  ALLOWED_EXTENSIONS,
-  IMAGE_INPUT_NAME,
-  MAX_FILE_SIZE_IN_BYTES,
-  MAX_MEGABYTE,
-} from '@/lib/constants';
+import { ALLOWED_EXTENSIONS, IMAGE_INPUT_NAME } from '@/lib/constants';
 import fs from 'fs';
 import {
   createUploadsDirIfMissing,
   generateFilename,
   getFileExtension,
   getImagePath,
-} from '@/lib/image-utils';
+} from '@/lib/api-utils';
+import { validateImageFile } from '@/lib/common-utils';
 
 type ResponseType =
   | {
@@ -31,20 +27,15 @@ export async function submitImageAction(
   formData: FormData
 ): Promise<ResponseType> {
   try {
-    const file = formData.get(IMAGE_INPUT_NAME) as File | null;
+    const file = formData.get(IMAGE_INPUT_NAME) as File;
 
-    if (!file || !(file instanceof File)) {
-      return { error: 'No image uploaded.', success: false };
+    const imageValidationError = validateImageFile(file);
+
+    if (imageValidationError) {
+      return imageValidationError;
     }
 
-    if (file.size > MAX_FILE_SIZE_IN_BYTES) {
-      return {
-        error: `File too large. Maximum size is ${MAX_MEGABYTE} MB.`,
-        success: false,
-      };
-    }
-
-    const fileExtension = getFileExtension(file);
+    const fileExtension = getFileExtension(file as File);
 
     if (!ALLOWED_EXTENSIONS.includes(fileExtension)) {
       return { error: 'Invalid file type.', success: false };

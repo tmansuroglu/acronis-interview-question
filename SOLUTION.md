@@ -60,9 +60,12 @@
 
 - Created utilities
 
-  - `lib/constants.ts`: `ALLOWED_EXTENSIONS`, `MAX_FILE_SIZE_IN_BYTES`, `EXT_TO_MIME`, `MAX_MEGABYTE`, `IMAGE_CACHE_HEADERS`, `IMAGE_INPUT_NAME`
+  - `lib/constants.ts`: `ONE_MEGABYTE_IN_BYTES`, `MAX_MEGABYTE`, `MAX_FILE_SIZE_IN_BYTES`, `ALLOWED_EXTENSIONS`, `EXT_TO_MIME`, `IMAGE_CACHE_HEADERS`, `IMAGE_INPUT_NAME`
   - `lib/enums.ts`: `Status`
-  - `lib/image-utils.ts`: `getImagePath`, `createUploadsDirIfMissing`, `getContentType`, `getFileExtension`, `generateFilename`,`doesImageExist`
+  - `lib/common-utils.ts`: `validateImageFile`
+  - `lib/form-utils.ts`: `handleImageFormSubmit`
+  - `lib/api-utils.ts`: `uploadsDir`, `getImagePath`, `createUploadsDirIfMissing`, `MIME_TO_EXT`, `getContentType`, `getFileExtension`, `generateFilename`, `doesImageExist`
+  - `lib/hooks.ts`: `useImagePreview`,
 
 - Implemented better file name generation.
 
@@ -80,11 +83,15 @@
   - Image existence check. Implemented at `/app/api/images[filename]/route.ts` line 18.
   - Updated image headers to block MIME sniffing and SVG XSS
 
-- Cleaned up the frontend
+- Cleaned up & improved the frontend
 
   - implemented Nextjs Image component
-  - Removed all unnecessary code. Including the image preview.(It was not serving a purpose here.)
+  - Removed all unnecessary code.
   - Used constant for input `name`
+  - Started to use `submitImageAction` server action.
+  - Implemented `useImagePreview` hook to keep track of preview.
+  - Used `handleImageFormSubmit` to provide form validation.
+  - Set server action body size limit as 5mb.
 
 # STEP 6: TESTING
 
@@ -113,6 +120,8 @@
 - Removing the unused code inside `app/page.tsx`.
 - Using `useActionState` for server action states.
 - Using Nextjs's Image component to display images and setting image priority.
+- Form validation.
+- Set server action body size limit as 5mb in `next.config.ts`
 
 ### Back-end Improvements
 
@@ -140,5 +149,4 @@
 - Not found page.
 - Error tracker(like Sentry).
 - Analytics tools(like Google Analytics, Datadog etc.).
-- FE form validation.
 - Proper Design.

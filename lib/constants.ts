@@ -1,8 +1,8 @@
-const ONE_MEGABYTE = 1024 * 1024;
+const ONE_MEGABYTE_IN_BYTES = 1024 * 1024;
 
-export const MAX_MEGABYTE = 15;
+export const MAX_MEGABYTE = 5;
 
-export const MAX_FILE_SIZE_IN_BYTES = MAX_MEGABYTE * ONE_MEGABYTE;
+export const MAX_FILE_SIZE_IN_BYTES = MAX_MEGABYTE * ONE_MEGABYTE_IN_BYTES;
 
 export const ALLOWED_EXTENSIONS = [
   '.jpg',
@@ -14,9 +14,7 @@ export const ALLOWED_EXTENSIONS = [
   '.svg',
 ];
 
-type Ext = (typeof ALLOWED_EXTENSIONS)[number];
-
-export const EXT_TO_MIME: Record<Ext, string> = {
+export const EXT_TO_MIME: Record<string, string> = {
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
   '.png': 'image/png',
