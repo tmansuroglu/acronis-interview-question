@@ -52,7 +52,7 @@
   - Created `app/actions/submit-image-action.ts`
   - Used `useActionState` in `page.tsx`
 
-- Moved uploaded files outside of the `/public` folder in production
+- Moved the uploaded files outside of the `/public` folder in production
 
   - Changed Docker volume mount (`docker-compose.yml`) from `/app/public/uploads` => `/app/uploads`
   - Updated `Dockerfile` to create `/app/uploads` at build time
@@ -67,7 +67,7 @@
   - `lib/api-utils.ts`: `uploadsDir`, `getImagePath`, `createUploadsDirIfMissing`, `MIME_TO_EXT`, `getContentType`, `getFileExtension`, `generateFilename`, `doesImageExist`
   - `lib/hooks.ts`: `useImagePreview`,
 
-- Implemented better file name generation.
+- Implemented a better file name generation.
 
   - With `generateFilename` function (located in`lib/image-utils'`) implemented `crypto.randomUUID()` as the file name.
 
@@ -91,7 +91,7 @@
   - Started to use `submitImageAction` server action.
   - Implemented `useImagePreview` hook to keep track of preview.
   - Used `handleImageFormSubmit` to provide form validation.
-  - Set server action body size limit as 5mb.
+  - Set server action body size limit as 5MB.
 
 # STEP 6: TESTING
 
