@@ -19,8 +19,8 @@
 # STEP 2: RESEARCH
 
 - I read some articles and talked with AI. Now everything makes sense.
-- When the project is run with `npm run dev` public folder is watched for changes by nextjs.
-- When running a production build, public folder is not watched for changes. It is cached at the state of build time.
+- When you run `npm run dev`, the public folder is watched for changes by nextjs.
+- When you run a production build, the public folder is not watched for changes. It is cached at the build time.
 - `Dockerfile` content shows that `docker-compose up`command runs a production build. So, the problem occurs.
 
 ### Question: By default, is there any folder served dynamically by nextjs?
@@ -32,7 +32,7 @@
 ## Solution 1
 
 - Create an api endpoint to return image file from public folder. Example: `app/api/images/[filename]/route.ts`
-- Make the already existing api endpoint(now server action) return get request url. Example: `` imagePath: '/api/images/blabla.png'`
+- Make the already existing api endpoint (now server action) return get request url. Example: `imagePath: '/api/images/blabla.png'`
 - `imagePath` is used as src attribute of the preview image element. When an image is uploaded a request will be sent to `app/api/images/[filename]/route.ts` by the image element and correct image will be displayed.
 
 ## Solution 2
@@ -41,12 +41,12 @@
 
 # STEP 4: PICK A SOLUTION
 
-- Solution 2 is against the purpose of this exercise. Also overkill for this project.
+- Solution 2 is against the purpose of this exercise. Also an overkill for this project.
 - Solution 1 is the winner.
 
 # STEP 5: IMPLEMENTATION
 
-- Replaced already existing api route with a server action.
+- Replaced the existing api route with a server action.
 
   - Deleted `app/api/upload-image/route.ts`
   - Created `app/actions/submit-image-action.ts`
@@ -95,6 +95,8 @@
 
 # STEP 6: TESTING
 
+- If the packages are not installed, run `npm install`
+
 ## Make sure dev environment is functional
 
 - Run `npm run dev`, upload an image and make sure it is visible.
@@ -105,7 +107,7 @@
 
 - Run `docker-compose down --rmi all -v` command for complete cleanup.
 - Run `docker-compose up` upload an image and make sure preview is visible. Click on `View Full Image` and keep the uploaded image in new tab.
-- You wont see any new image in your local project folder.
+- You wont see any new images in your local project folder.
 - Run `docker compose exec nextjs-app ls -1 /app/uploads` you will see the image's name in the terminal ( check the uploaded image tab url for image name http://localhost:3000/api/images/IMAGE_NAME_HERE ).
 - Run `docker-compose down` to stop docker.
 - Refresh the upload image's tab and you won't see anything.
@@ -121,15 +123,15 @@
 - Using `useActionState` for server action states.
 - Using Nextjs's Image component to display images and setting image priority.
 - Form validation.
-- Set server action body size limit as 5mb in `next.config.ts`
+- Set server action body size limit as 5MB in `next.config.ts`
 
 ### Back-end Improvements
 
 - Creating utilities to simplify code.
-- Adjusting folder structure and naming for more restful approach
-- Covering the case of `formData.get('image')` being null
-- Instead of using `Date.now()` as file name, using `randomUUID` from `crypto` library to guarantee unique image name
-- Implement status code enum for responses
+- Adjusting folder structure and naming for more restful approach.
+- Covering the case of `formData.get('image')` being null.
+- Instead of using `Date.now()` as file name, using `randomUUID` from `crypto` library to guarantee unique image name.
+- Implement status code enum for responses.
 - Adding a file size validation.
 - Sanitizing file name to extract file extension safely and accurately.
 - Using a new folder outside of `public`folder to avoid confusion.
