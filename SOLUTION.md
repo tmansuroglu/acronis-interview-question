@@ -1,8 +1,8 @@
 # STEP 1: THINK
 
-## Why preview is visible?
+## Why the preview works?
 
-- It is client side state. It just works.
+- It is just a client side state. Unrelated to upload bug.
 
 ## Is there a difference in the current working directory or path of docker container?
 
@@ -54,7 +54,7 @@
 
 - Moved uploaded files outside of the `/public` folder in production
 
-  - Changed Docker volume mount from `/app/public/uploads` => `/app/uploads`
+  - Changed Docker volume mount (`docker-compose.yml`) from `/app/public/uploads` => `/app/uploads`
   - Updated `Dockerfile` to create `/app/uploads` at build time
   - Modified `lib/image-utils.ts` to write to `/app/uploads` in production and keep `/public/uploads` only for local dev.
 
@@ -62,29 +62,28 @@
 
   - `lib/constants.ts`: `ALLOWED_EXTENSIONS`, `MAX_FILE_SIZE_IN_BYTES`, `EXT_TO_MIME`, `MAX_MEGABYTE`, `IMAGE_CACHE_HEADERS`, `IMAGE_INPUT_NAME`
   - `lib/enums.ts`: `Status`
-  - `lib/image-utils.ts`: `getImagePath`, `createUploadsDirIfMissing`, `getContentType`, `getFileExtension`, `generateFilename`, `imageExists`
+  - `lib/image-utils.ts`: `getImagePath`, `createUploadsDirIfMissing`, `getContentType`, `getFileExtension`, `generateFilename`,`doesImageExist`
 
-- Implemented better file name generation
+- Implemented better file name generation.
 
-  - Used `crypto.randomUUID()` + only the vetted extension as the file name
-  - Added strict extension allow-list
-
-- Added Validation
-
-  - File size limit validation
-  - Extension allow-list
-  - Null check on FormData
-  - File instace check
+  - With `generateFilename` function (located in`lib/image-utils'`) implemented `crypto.randomUUID()` as the file name.
 
 - Created image serving route
 
   - `app/api/images/[filename]/route.ts`
-  - Check if the file exists first
+
+- Added Security & Validation
+
+  - File size limit validation. Implemented at `/app/actions/submit-image-action.ts` line 40.
+  - Extension allow-list. Implemented at `/app/actions/submit-image-action.ts` line 49.
+  - File instance and null check on FormData. Implemented at `/app/actions/submit-image-action.ts` line 34.
+  - Image existence check. Implemented at `/app/api/images[filename]/route.ts` line 18.
+  - Updated image headers to block MIME sniffing and SVG XSS
 
 - Cleaned up the frontend
 
   - implemented Nextjs Image component
-  - Removed all unnecessary code. Including the image preview.
+  - Removed all unnecessary code. Including the image preview.(It was not serving a purpose here.)
   - Used constant for input `name`
 
 # STEP 6: TESTING
@@ -111,26 +110,35 @@
 
 ### Front-end Improvements
 
-- Removing the unused code inside `app/page.tsx`. (IMPLEMENTED)
-- Using `useActionState` for server action states. (IMPLEMENTED)
-- Using Nextjs's Image component to display images and setting image priorities. (IMPLEMENTED)
+- Removing the unused code inside `app/page.tsx`.
+- Using `useActionState` for server action states.
+- Using Nextjs's Image component to display images and setting image priority.
 
 ### Back-end Improvements
 
-- Creating utilities to simplify code. (IMPLEMENTED)
-- Adjusting folder structure and naming for more restful approach (IMPLEMENTED)
-- Covering the case of `formData.get('image')` being null (IMPLEMENTED)
-- Instead of using `Date.now()` as file name, using `randomUUID` from `crypto` library to guarantee unique image name (IMPLEMENTED)
-- Implement status code enum for responses (IMPLEMENTED)
-- Adding a file size validation. (IMPLEMENTED)
-- Sanitizing file name to extract file extension safely and accurately. (IMPLEMENTED)
-- Using a new folder outside of `public`folder to avoid confusion. (IMPLEMENTED)
-- Using server action instead of image upload endpoint. (IMPLEMENTED)
+- Creating utilities to simplify code.
+- Adjusting folder structure and naming for more restful approach
+- Covering the case of `formData.get('image')` being null
+- Instead of using `Date.now()` as file name, using `randomUUID` from `crypto` library to guarantee unique image name
+- Implement status code enum for responses
+- Adding a file size validation.
+- Sanitizing file name to extract file extension safely and accurately.
+- Using a new folder outside of `public`folder to avoid confusion.
+- Using server action instead of image upload endpoint.
+- Updated image headers to block MIME sniffing and SVG XSS
 
 ## Suggested Improvements
 
-- Using redis for rate limiter.
-- Proper UI
-- Using a real storage backend(AWS) or your own db.
-- Error state handling (global error page, route error page)
-- Not found page
+### If the project grows, I suggest
+
+- Using redis or memory for a rate limiter.
+- Periodic image file cleanup.
+- Having a real storage backend(AWS) or your own db.
+- Form error display.
+- Global error page.
+- Route error page.
+- Not found page.
+- Error tracker(like Sentry).
+- Analytics tools(like Google Analytics, Datadog etc.).
+- FE form validation.
+- Proper Design.
