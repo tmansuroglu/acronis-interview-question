@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { getContentType, getImagePath, imageExists } from '@/lib/image-utils';
+import {
+  getContentType,
+  getImagePath,
+  doesImageExist,
+} from '@/lib/image-utils';
 import { IMAGE_CACHE_HEADERS } from '@/lib/constants';
 import { Status } from '@/lib/enums';
 
@@ -11,7 +15,7 @@ export async function GET(request: Request, { params }: Params) {
   try {
     const { filename } = await params;
 
-    if (!imageExists(filename)) {
+    if (!doesImageExist(filename)) {
       return NextResponse.json(
         { error: 'Image not found' },
         { status: Status.NotFound }

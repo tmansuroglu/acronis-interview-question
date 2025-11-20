@@ -33,5 +33,5 @@ export const generateFilename = (ext: string) => {
   return `${randomUUID()}${ext.toLowerCase()}`;
 };
 
-export const imageExists = (filename: string) =>
+export const doesImageExist = (filename: string) =>
   fs.existsSync(getImagePath(filename));
