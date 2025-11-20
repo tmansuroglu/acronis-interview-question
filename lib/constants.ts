@@ -28,6 +28,8 @@ export const EXT_TO_MIME: Record<Ext, string> = {
 
 export const IMAGE_CACHE_HEADERS = {
   'Cache-Control': 'public, max-age=31536000, immutable',
+  'X-Content-Type-Options': 'nosniff', // block MIME sniffing
+  'Content-Security-Policy': "default-src 'none'; sandbox", // stop SVG XSS
 };
 
 export const IMAGE_INPUT_NAME = 'image';
