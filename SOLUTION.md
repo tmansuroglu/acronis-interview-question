@@ -54,7 +54,8 @@
 
 - Moved the uploaded files outside of the `/public` folder in production
 
-  - Changed Docker volume mount (`docker-compose.yml`) from `/app/public/uploads` => `/app/uploads`
+  - Updated the Docker volume configuration (`docker-compose.yml`) so uploads are now stored at `/app/uploads` instead of `/app/public/uploads`.
+  - For persistence, switched from a bind mount to a named volume. (`docker-compose.yml`)
   - Updated `Dockerfile` to create `/app/uploads` at build time
   - Modified `lib/image-utils.ts` to write to `/app/uploads` in production and keep `/public/uploads` only for local dev.
 
